@@ -42,7 +42,7 @@ actuelle au premier changement d'icône.
 
 ## Attention à la conversion
 
-62 pictogrammes sur 91 utilisent des `stroke`. icomoon veut des tracés pleins :
+58 pictogrammes sur 87 utilisent des `stroke`. icomoon veut des tracés pleins :
 les contours doivent être vectorisés, et une vectorisation approximative
 déplace ou fait disparaître les traits fins aux petites tailles — les pins de
 carte font 22 px. Une revue visuelle avant/après est nécessaire sur ces

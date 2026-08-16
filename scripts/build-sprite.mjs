@@ -2,9 +2,9 @@
  * Assemble les pictogrammes SVG en une planche unique (`dist/pictos.sprite.svg`).
  *
  * C'est la réponse du web à ce que la police d'icônes apporte à l'app : une
- * seule ressource au lieu de quatre-vingt-dix requêtes, référencée par nom
+ * seule ressource au lieu de quatre-vingts requêtes, référencée par nom
  * logique — `<use href="pictos.sprite.svg#picto-activites-canyoning">` — sans
- * rien perdre au passage. Les tracés restent des tracés (62 pictos sur 91
+ * rien perdre au passage. Les tracés restent des tracés (58 pictos sur 87
  * utilisent des `stroke`, qu'une police obligerait à vectoriser), les
  * pictogrammes bicolores restent bicolores, et le texte alternatif reste
  * possible.

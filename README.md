@@ -10,7 +10,7 @@ l'autre : chacun **consomme** ce paquet à la version qu'il choisit.
 
 | | |
 |---|---|
-| `assets/pictos/` | 90 pictogrammes en 5 familles — **sources maîtresses** |
+| `assets/pictos/` | 86 pictogrammes en 5 familles — **sources maîtresses** |
 | `assets/icons/` | 33 icônes d'interface — sources de la police d'icônes de l'app |
 | `src/pictos.generated.ts` | registre des noms logiques, généré depuis l'arborescence |
 | `src/index.ts` | résolution d'un nom logique en chemin (web) ou en glyphe (app) |
@@ -81,10 +81,11 @@ c'est ce qu'il faut brancher en CI.
 L'app affiche une police d'icônes, ce qui est l'approche idiomatique en
 NativeScript. Le web garde les SVG, pour des raisons qui lui sont propres :
 
-- ses 341 usages sont des `<img alt="…">` porteurs de sens, y compris sur les
+- ses pictogrammes sont servis par des `<img alt="…">` porteurs de sens — 115
+  balises rien que dans les gabarits — y compris sur les
   pages rendues côté serveur pour les robots ; un glyphe de police est un
   caractère de zone privée qu'aucun lecteur d'écran ne sait lire ;
-- 62 pictogrammes sur 91 utilisent des `stroke`, qu'une police obligerait à
+- 58 pictogrammes sur 87 utilisent des `stroke`, qu'une police obligerait à
   vectoriser — donc à retoucher des dessins validés ;
 - 11 variantes `_select` sont bicolores (fond orange, symbole blanc), ce qu'un
   glyphe monochrome ne sait pas rendre ;
@@ -110,7 +111,7 @@ Par ailleurs `diving` n'a pas de variante `_select` ; le repli du registre
 ```jsonc
 // package.json
 "dependencies": {
-  "@eosya/topotheque-front-shared": "git+ssh://git@github.com/Eosya-Explore/topotheque-front-shared.git#v0.1.0"
+  "@eosya/topotheque-front-shared": "git+ssh://git@github.com/Eosya-Explore/topotheque-front-shared.git#v0.2.0"
 }
 ```
 
