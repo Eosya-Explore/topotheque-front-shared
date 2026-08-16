@@ -111,9 +111,18 @@ Par ailleurs `diving` n'a pas de variante `_select` ; le repli du registre
 ```jsonc
 // package.json
 "dependencies": {
-  "@eosya/topotheque-front-shared": "git+ssh://git@github.com/Eosya-Explore/topotheque-front-shared.git#v0.2.0"
+  "@eosya/topotheque-front-shared": "git+https://github.com/Eosya-Explore/topotheque-front-shared.git#v0.2.2"
 }
 ```
 
 Le tag est explicite : une mise à jour est un commit dans le dépôt consommateur,
 jamais un effet de bord.
+
+**HTTPS et non SSH, dépôt public et non privé** : le front web s'installe à
+l'intérieur d'un conteneur Docker, qui n'hérite d'aucune clé de la machine
+hôte. Un `git+ssh://` vers un dépôt privé y échoue systématiquement, et la
+solution de rechange — injecter un agent SSH dans chaque build — se paie à
+chaque commande, sur chaque machine, indéfiniment. Le contenu de ce dépôt
+étant déjà servi publiquement par le site, le rendre lisible ne concède rien
+qu'un navigateur ne puisse déjà télécharger. Voir `LICENSE` : lisible ne veut
+pas dire libre de droits.
