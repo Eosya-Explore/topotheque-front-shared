@@ -1,0 +1,32 @@
+{
+  "name": "@eosya/topotheque-front-shared",
+  "version": "0.1.0",
+  "description": "Ressources communes aux fronts Topothèque (web Angular, app NativeScript) : pictogrammes, icônes, registre de noms logiques.",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./assets/*": "./assets/*"
+  },
+  "files": [
+    "assets",
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "generate": "node scripts/generate-registry.mjs",
+    "check": "node scripts/generate-registry.mjs --check",
+    "build:sprite": "node scripts/build-sprite.mjs",
+    "build": "tsc -p tsconfig.json",
+    "prepare": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}
