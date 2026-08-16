@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "generate": "node scripts/generate-registry.mjs",
-    "check": "node scripts/generate-registry.mjs --check",
+    "check": "node scripts/check-naming.mjs && node scripts/generate-registry.mjs --check",
     "build:sprite": "node scripts/build-sprite.mjs",
     "build": "tsc -p tsconfig.json",
     "prepare": "tsc -p tsconfig.json"

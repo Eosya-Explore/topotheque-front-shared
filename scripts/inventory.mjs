@@ -16,9 +16,13 @@ export const PICTOS_DIR = join(ROOT, 'assets', 'pictos');
 export const FALLBACK_FILE = 'unknown.svg';
 
 /**
- * Nom logique : minuscules, séparateurs unifiés, frontières de casse
- * explicitées. `ZoneProtegee` → `zone_protegee`, `positive elevation` →
- * `positive_elevation`, `Start_elevation` → `start_elevation`.
+ * Normalise un nom en identifiant logique : minuscules, séparateurs unifiés,
+ * frontières de casse explicitées (`MonPicto` → `mon_picto`).
+ *
+ * Les fichiers de ce dépôt sont déjà canoniques — `check-naming.mjs` le
+ * garantit — donc cette fonction est l'identité sur eux. Elle sert au
+ * *bord* : normaliser ce qui vient de l'API côté client, dont on ne maîtrise
+ * pas la forme.
  */
 export function toGlyph(name) {
   return name

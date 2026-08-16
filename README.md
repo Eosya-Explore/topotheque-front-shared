@@ -45,20 +45,27 @@ pictoGlyph('activites/canyoning')   // app → picto-activites-canyoning
 Un identifiant inconnu retombe sur `unknown.svg` au lieu de produire une image
 cassée — ce que faisait la concaténation.
 
-## Les fichiers ne sont jamais renommés
+## Un seul nommage : minuscules, chiffres, underscores
 
-Des centaines de références statiques pointent sur les noms actuels, et ces
-noms sont irréguliers : espaces (`positive elevation.svg`), casse mixte
-(`ZoneAdministrative.svg`), français et anglais mêlés (`Arrivee.svg`,
-`summit.svg`). Le registre absorbe ces irrégularités au lieu de les corriger :
+L'arborescence héritée mélangeait les conventions — espaces
+(`positive elevation.svg`), casse mixte (`ZoneAdministrative.svg`), français
+et anglais côte à côte (`Arrivee.svg` et `summit.svg`), kebab et snake dans
+les icônes. Tout a été normalisé, et `npm run check` refuse désormais un
+fichier qui s'en écarterait.
 
-```
-topos/positive_elevation   → « positive elevation.svg »
-onMapPOIs/zone_administrative → « ZoneAdministrative.svg »
-```
+`toGlyph()` reste utile, mais au *bord* : normaliser un slug d'activité ou un
+type de POI qui arrive de l'API, dont on ne maîtrise pas la forme. Il n'a plus
+à rattraper nos propres fichiers.
 
-Renommer les fichiers casserait les 331 `<img src="assets/pictos/…">` du web
-pour un gain nul : le nom logique suffit.
+Deux familles sont des vocabulaires du backend et doivent le rester :
+
+| Famille | Vocabulaire |
+|---|---|
+| `activites/` | slugs d'activité (`climbing`, `via_ferrata`, …) |
+| `geographical/`, `onMapPOIs/` | `POI_TYPES` (`summit`, `saddle`, `cliff`, …) |
+
+Les fronts y résolvent un pictogramme depuis une valeur reçue de l'API : un
+écart de nommage s'y traduit par un pictogramme manquant, pas par une erreur.
 
 ## Ajouter ou modifier un pictogramme
 
