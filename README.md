@@ -13,6 +13,8 @@ l'autre : chacun **consomme** ce paquet à la version qu'il choisit.
 | `assets/pictos/` | 86 pictogrammes en 5 familles — **sources maîtresses** |
 | `assets/icons/` | 33 icônes d'interface — sources de la police d'icônes de l'app |
 | `src/pictos.generated.ts` | registre des noms logiques, généré depuis l'arborescence |
+| `src/field-labels.generated.ts` | vocabulaire des champs, généré depuis le backend |
+| `src/filter-utils.ts` | filtres et mise en page des champs par activité |
 | `src/index.ts` | résolution d'un nom logique en chemin (web) ou en glyphe (app) |
 | `scripts/build-sprite.mjs` | planche SVG unique pour le web |
 | `icomoon/` | projet icomoon d'où sort `app.ttf` |
@@ -44,6 +46,55 @@ pictoGlyph('activites/canyoning')   // app → picto-activites-canyoning
 
 Un identifiant inconnu retombe sur `unknown.svg` au lieu de produire une image
 cassée — ce que faisait la concaténation.
+
+## Les libellés viennent du backend, et c'est voulu
+
+`src/field-labels.generated.ts` est produit par `manage.py export_field_labels`
+depuis `backend/topotheque_app/labels.py`, qui reste la **source de vérité**.
+Le déplacer ici serait une régression : le backend est lui-même consommateur de
+ces libellés — admin, pages rendues pour les robots, `filter_options` — et
+Django ne sait pas lire un paquet npm. Surtout, le libellé d'un champ se
+décide là où le champ se décide ; les séparer, c'est organiser l'oubli.
+
+Ce qui a changé, c'est la **distribution**. La commande écrivait dans
+`frontend/eosya_frontend-user/src/app/utils/`, un chemin qu'aucun autre client
+ne peut atteindre : l'app mobile gardait donc ses libellés en dur, c'est-à-dire
+exactement la table divergente que `labels.py` existe pour supprimer. Les deux
+fronts lisent maintenant la même copie, au même tag.
+
+Rien ne synchronise automatiquement les deux dépôts. C'est
+`manage.py export_field_labels --check`, branché en CI côté backend, qui tient
+la copie honnête — et l'endpoint `GET /api/field-labels` qui permet de corriger
+une formulation sans attendre une release.
+
+## Les filtres : ce qui empêchait de les partager
+
+`src/filter-utils.ts` existait en deux exemplaires — le front web et
+`app/helpers/filterUtils.ts` — forkés et divergents. L'obstacle n'était pas le
+contenu mais une ligne de résolution : `picto(id)` rend un chemin de fichier
+servi en HTTP, notion qui n'existe pas dans une application qui affiche une
+police d'icônes.
+
+Le noyau porte donc des **noms logiques**, et chaque front les résout une fois
+au démarrage :
+
+```ts
+import { resolveIcons, pictoPath } from '@eosya/topotheque-front-shared';
+
+resolveIcons((id) => pictoPath(id));   // web → un chemin
+resolveIcons((id) => pictoGlyph(id));  // app → un glyphe
+```
+
+La résolution s'écrit **dans** la table plutôt que d'en rendre une copie : les
+configurations portent des fonctions de formatage qu'un clonage structuré
+perdrait, et des composants lisent `ACTIVITY_CONFIGS` directement — deux
+versions coexistantes seraient la panne qu'on cherche à éviter. L'opération est
+idempotente : les identifiants d'origine sont conservés.
+
+Deux oublis sont possibles et silencieux jusqu'à l'image cassée : une icône
+construite dans le corps d'une fonction (hors de la table, donc hors de portée
+de `resolveIcons`) et un identifiant absent du registre. `npm run check` refuse
+les deux.
 
 ## Un seul nommage : minuscules, chiffres, underscores
 
@@ -111,7 +162,7 @@ Par ailleurs `diving` n'a pas de variante `_select` ; le repli du registre
 ```jsonc
 // package.json
 "dependencies": {
-  "@eosya/topotheque-front-shared": "git+https://github.com/Eosya-Explore/topotheque-front-shared.git#v0.2.2"
+  "@eosya/topotheque-front-shared": "git+https://github.com/Eosya-Explore/topotheque-front-shared.git#v0.3.0"
 }
 ```
 

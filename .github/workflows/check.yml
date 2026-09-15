@@ -1,0 +1,26 @@
+# `npm run check` refuse un fichier dont le nommage s'écarte de la convention
+# et un registre qui ne correspond plus à l'arborescence. Ces contrôles
+# existaient depuis la création du dépôt sans jamais tourner : un pictogramme
+# ajouté sans régénérer passait donc inaperçu jusqu'à l'image cassée en
+# production.
+
+name: Contrôles
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Nommage et registre
+        run: npm run check
+      - name: Compilation
+        run: npm run build

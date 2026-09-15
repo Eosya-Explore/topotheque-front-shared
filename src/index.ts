@@ -19,6 +19,26 @@
  * de nommage — espaces, casse mixte, français et anglais mêlés.
  */
 
+/**
+ * Vocabulaire canonique des champs de topo.
+ *
+ * Généré par `manage.py export_field_labels` depuis `backend/topotheque_app/
+ * labels.py`, qui reste la source de vérité : le backend en est lui-même
+ * consommateur (admin, pages bots, `filter_options`), et le libellé d'un
+ * champ se décide là où le champ se décide. Ce qui vit ici, c'est la
+ * **distribution** — auparavant réservée au front web, ce qui laissait l'app
+ * mobile avec ses libellés en dur.
+ */
+/**
+ * Filtres et mise en page des champs par activité — commun aux deux fronts.
+ * Les pictogrammes y sont des noms logiques : appeler `resolveIcons()` une
+ * fois au démarrage avec la résolution de la plateforme.
+ */
+export * from './filter-utils.js';
+
+export type { FieldLabel } from './field-labels.generated.js';
+export { FIELD_ALIASES, FIELD_LABELS } from './field-labels.generated.js';
+
 export type { PictoEntry, PictoFamily, PictoFiles } from './pictos.generated.js';
 export { FALLBACK_PICTO_FILE, PICTOS } from './pictos.generated.js';
 
