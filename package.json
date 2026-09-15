@@ -1,7 +1,7 @@
 {
   "name": "@eosya/topotheque-front-shared",
-  "version": "0.2.3",
-  "description": "Ressources communes aux fronts Topothèque (web Angular, app NativeScript) : pictogrammes, icônes, registre de noms logiques.",
+  "version": "0.3.0",
+  "description": "Ressources communes aux fronts Topothèque (web Angular, app NativeScript) : pictogrammes, icônes, vocabulaire des champs, filtres.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "generate": "node scripts/generate-registry.mjs",
-    "check": "node scripts/check-naming.mjs && node scripts/generate-registry.mjs --check",
+    "check": "node scripts/check-naming.mjs && node scripts/generate-registry.mjs --check && node scripts/check-icons.mjs",
     "build:sprite": "node scripts/build-sprite.mjs",
     "build": "tsc -p tsconfig.json",
     "prepare": "tsc -p tsconfig.json"
