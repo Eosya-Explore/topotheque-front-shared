@@ -60,6 +60,22 @@ export interface ActivityConfig {
 }
 
 // Fonctions utilitaires pour le formatage des valeurs
+/**
+ * Libellés de `Guide.shuttle` (nécessité d'une navette). L'API sert la clé
+ * anglaise ; les libellés sont ceux du backend (`Guide.SHUTTLE`,
+ * `filter_labels.VALUE_LABEL_OVERRIDES`). Une valeur inconnue est rendue
+ * telle quelle plutôt que masquée.
+ */
+export const SHUTTLE_LABELS: Record<string, string> = {
+  required: 'Navette nécessaire',
+  possible: 'Navette possible',
+  no_shuttle: 'Sans navette',
+};
+
+export function formatShuttle(val: string): string {
+  return SHUTTLE_LABELS[val] ?? val;
+}
+
 export function formatDurationMinutesToHours(val: number) {
   // Espace insécable
   const nbsp = '\u00A0';
@@ -1384,8 +1400,14 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
           icon: 'topos/altitude',
         },
         {
+          key: 'shuttle',
+                    orderKey: 'F5a',
+                    icon: 'topos/distance',
+                    valueFormatter: formatShuttle,
+        },
+        {
           key: 'distance_start_finish',
-                    orderKey: 'F5',
+                    orderKey: 'F5b',
                     icon: 'topos/distance',
         },
         {
