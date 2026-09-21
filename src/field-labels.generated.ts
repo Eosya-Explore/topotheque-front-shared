@@ -46,7 +46,7 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
   },
   "distance_start_finish": {
     "long": "Distance de la navette voiture",
-    "short": "Navette",
+    "short": "Distance navette",
     "unit": "km"
   },
   "duration_approach": {
@@ -332,6 +332,11 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
   "route_number": {
     "long": "Nombre de voies du site",
     "short": "Nb de voies du site",
+    "unit": null
+  },
+  "shuttle": {
+    "long": "Navette",
+    "short": "Navette",
     "unit": null
   },
   "start_place": {
