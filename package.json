@@ -1,6 +1,6 @@
 {
   "name": "@eosya/topotheque-front-shared",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Ressources communes aux fronts Topothèque (web Angular, app NativeScript) : pictogrammes, icônes, vocabulaire des champs, filtres.",
   "license": "UNLICENSED",
   "private": true,
