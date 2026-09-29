@@ -37,7 +37,11 @@
 export * from './filter-utils.js';
 
 export type { FieldLabel } from './field-labels.generated.js';
-export { FIELD_ALIASES, FIELD_LABELS } from './field-labels.generated.js';
+export {
+  FIELD_ALIASES,
+  FIELD_LABELS,
+  GROUP_LABELS,
+} from './field-labels.generated.js';
 
 export type { PictoEntry, PictoFamily, PictoFiles } from './pictos.generated.js';
 export { FALLBACK_PICTO_FILE, PICTOS } from './pictos.generated.js';

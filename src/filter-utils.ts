@@ -11,7 +11,11 @@
 // Résoudre ici reviendrait à réserver ce fichier à une plateforme — c'est
 // précisément ce qui l'avait fait exister en deux exemplaires divergents.
 // Chaque front applique `resolveIcons()` une fois au démarrage.
-import { FIELD_ALIASES, FIELD_LABELS } from './field-labels.generated.js';
+import {
+  FIELD_ALIASES,
+  FIELD_LABELS,
+  GROUP_LABELS,
+} from './field-labels.generated.js';
 
 export interface ActivityFieldConfig {
   key: string;
@@ -21,13 +25,23 @@ export interface ActivityFieldConfig {
   orderKey?: string;
   group?: string;
   groupSeparator?: string;
+  /**
+   * Libellé de la ligne composée : une clé de `GROUP_LABELS`, ou celle d'un
+   * champ quand le groupe se nomme comme lui. Résolue au chargement, comme
+   * `label`. Absent, la ligne prend le libellé de son premier champ.
+   */
   groupPrefix?: string;
   itemPrefix?: string;
   itemSuffix?: string;
   valueFormatter?: (value: any) => string;
   icon?: string;
   hide?: boolean;
+  /** Champ affiché à la place quand celui-ci est vide. */
   fallbackKey?: string;
+  /**
+   * Libellés pris sous repli — des clés (champ ou groupe), résolues au
+   * chargement. Absents, la ligne garde son libellé.
+   */
   fallbackLabel?: string;
   fallbackGroupPrefix?: string;
   secondFallbackKey?: string;
@@ -434,7 +448,6 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
       C: [
         {
           key: 'itinerary_type',
-          label: "Type d'itinéraire",
           orderKey: 'C3',
           icon: 'topos/itinerary',
         },
@@ -449,7 +462,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C5a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé + / -',
+          groupPrefix: 'elevation_gain_loss',
           icon: 'topos/positive_elevation',
         },
         {
@@ -465,7 +478,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D2a',
           group: 'grade',
           groupSeparator: ' / ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
         },
         {
@@ -485,7 +498,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F1a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude min / max',
+          groupPrefix: 'elevation_min_max',
           icon: 'topos/altitude',
         },
         {
@@ -506,7 +519,6 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
       C: [
         {
           key: 'itinerary_type',
-          label: "Type d'itinéraire",
           orderKey: 'C3',
           icon: 'topos/itinerary',
         },
@@ -521,7 +533,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C5a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé + / -',
+          groupPrefix: 'elevation_gain_loss',
           icon: 'topos/positive_elevation',
         },
         {
@@ -537,7 +549,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D2a',
           group: 'grade',
           groupSeparator: ' / ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
         },
         {
@@ -558,7 +570,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F1a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude min / max',
+          groupPrefix: 'elevation_min_max',
           icon: 'topos/altitude',
         },
         {
@@ -579,7 +591,6 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
       C: [
         {
           key: 'itinerary_type',
-          label: "Type d'itinéraire",
           orderKey: 'C3',
           icon: 'topos/itinerary',
         },
@@ -594,7 +605,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C5a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé + / -',
+          groupPrefix: 'elevation_gain_loss',
           icon: 'topos/positive_elevation',
         },
         {
@@ -610,7 +621,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D2a',
           group: 'grade',
           groupSeparator: ' / ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
         },
         {
@@ -635,7 +646,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F1a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude min / max',
+          groupPrefix: 'elevation_min_max',
           icon: 'topos/altitude',
         },
         {
@@ -686,7 +697,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C4b',
           valueFormatter: formatDurationMinutesToHours,
           group: 'durees',
-          groupPrefix: 'Durées (approche / via / retour)',
+          groupPrefix: 'durations_approach_via_return',
           icon: 'topos/duration',
           displayContextOverrides: {
             'guide-guidebook-learn-more-popup': {
@@ -723,7 +734,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C5a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé + / -',
+          groupPrefix: 'elevation_gain_loss',
           icon: 'topos/positive_elevation',
         },
         {
@@ -744,7 +755,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D3a',
                     group: 'denivele_difficulty',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé des difficultées',
+          groupPrefix: 'elevation_difficulty_developed_length',
           icon: 'topos/positive_elevation',
         },
         {
@@ -765,7 +776,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F1a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude min / max',
+          groupPrefix: 'elevation_min_max',
           icon: 'topos/altitude',
         },
         {
@@ -833,7 +844,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D3a',
                     group: 'hauteur',
           groupSeparator: ' / ',
-          groupPrefix: 'Hauteur site min / max',
+          groupPrefix: 'crag_height_min_max',
           icon: 'topos/altitude',
         },
         {
@@ -944,7 +955,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F4a',
                     group: 'hauteur',
           groupSeparator: ' / ',
-          groupPrefix: 'Hauteur site max / min',
+          groupPrefix: 'crag_height_max_min',
           icon: 'topos/altitude',
         },
         {
@@ -966,7 +977,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C3a',
           group: 'grade',
           groupSeparator: ' ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
         },
         {
@@ -1006,14 +1017,14 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C4a',
                     group: 'longueur',
           groupSeparator: ' ',
-          groupPrefix: 'Longueur développée',
+          groupPrefix: 'developed_length',
           icon: 'topos/distance',
           fallbackKey: 'elevation_difficulty',
-          fallbackLabel: 'Dénivelé des difficultés',
-          fallbackGroupPrefix: 'Dénivelé des difficultés',
+          fallbackLabel: 'elevation_difficulty',
+          fallbackGroupPrefix: 'elevation_difficulty',
           secondFallbackKey: 'pitch_number',
-          secondFallbackLabel: 'Nombre de longueurs',
-          secondFallbackGroupPrefix: 'Nombre de longueurs',
+          secondFallbackLabel: 'pitch_number',
+          secondFallbackGroupPrefix: 'pitch_number',
           displayContextOverrides: {
             // Popup : affichée seule (sans fallback), juste sous la ligne
             // "Dénivelé des difficultés" (cf. elevation_difficulty / pitch_number).
@@ -1077,7 +1088,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D4a',
           group: 'cotation',
           groupSeparator: ' / ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
           displayContextOverrides: {
             'guide-details': {
@@ -1187,7 +1198,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F3a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé total ( + / - / difficultées)',
+          groupPrefix: 'elevation_total_gain_loss_difficulty_multi_pitch',
           icon: 'topos/positive_elevation',
         },
         {
@@ -1205,7 +1216,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
             // pitch_number → "Dénivelé des difficultés : XX m (N longueurs)".
             'guide-guidebook-learn-more-popup': {
               group: 'longueur',
-              groupPrefix: 'Dénivelé des difficultés',
+              groupPrefix: 'elevation_difficulty',
               orderKey: 'C4a',
             },
           },
@@ -1220,7 +1231,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F5a',
           group: 'duration',
           groupSeparator: ' / ',
-          groupPrefix: 'Durées (totale, difficulté, retour)',
+          groupPrefix: 'durations_total_difficulty_return',
           valueFormatter: formatDurationMinutesToHours,
           icon: 'topos/duration',
           displayContextOverrides: {
@@ -1282,7 +1293,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C3a',
           group: 'cotation',
           groupSeparator: ' ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
           displayContextOverrides: {
             'guide-guidebook-learn-more-popup': {
@@ -1345,7 +1356,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D2b',
           group: 'duration',
           groupSeparator: ' / ',
-          groupPrefix: 'Durées (approche, canyon, retour)',
+          groupPrefix: 'durations_approach_canyon_return',
           valueFormatter: formatDurationMinutesToHours,
           icon: 'topos/duration',
           displayContextOverrides: {
@@ -1390,7 +1401,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F4a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude min / max',
+          groupPrefix: 'elevation_min_max',
           icon: 'topos/altitude',
         },
         {
@@ -1428,7 +1439,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C3a',
           group: 'cotation',
           groupSeparator: ' ',
-          groupPrefix: 'Cotations',
+          groupPrefix: 'grades',
           icon: 'topos/difficulty_rating',
         },
         {
@@ -1495,7 +1506,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C4a',
                     group: 'longueur',
           groupSeparator: ' ',
-          groupPrefix: 'Longueur développée',
+          groupPrefix: 'developed_length',
           icon: 'topos/distance',
         },
         {
@@ -1518,7 +1529,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D2a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé total ( + / - / difficultés )',
+          groupPrefix: 'elevation_total_gain_loss_difficulty',
           icon: 'topos/positive_elevation',
         },
         {
@@ -1548,7 +1559,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D5a',
           group: 'duration',
           groupSeparator: ' / ',
-          groupPrefix: 'Durée totale',
+          groupPrefix: 'duration_total',
           valueFormatter: formatDurationMinutesToHours,
           icon: 'topos/duration',
           displayContextOverrides: {
@@ -1654,7 +1665,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C4a',
           group: 'duration',
           groupSeparator: ' / ',
-          groupPrefix: 'Durées (totale, approche, difficulté, retour)',
+          groupPrefix: 'durations_total_approach_difficulty_return',
           valueFormatter: formatDurationMinutesToHours,
           icon: 'topos/duration',
         },
@@ -1689,11 +1700,10 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
         {
           key: 'narrow_passage',
           icon: 'topos/narrow_passage',
-          label: "Présence d'étroiture",
           orderKey: 'D2',
         },
         { key: 'flood_risk', orderKey: 'D3', icon: 'topos/flood_risk' },
-        { key: 'itinerary_type', label: "Type d'itinéraire", orderKey: 'D4' },
+        { key: 'itinerary_type', orderKey: 'D4' },
         {
           key: 'grade_alpine',
                     orderKey: 'D5',
@@ -1705,7 +1715,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F1a',
                     group: 'longueur',
           groupSeparator: ' / ',
-          groupPrefix: 'Longueur de corde nécessaire et nombre de verticales',
+          groupPrefix: 'rope_length_vertical_number',
           icon: 'topos/ropes',
         },
         {
@@ -1726,7 +1736,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F4a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude (max / min)',
+          groupPrefix: 'elevation_max_min',
           icon: 'topos/altitude',
         },
         {
@@ -1761,7 +1771,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C3a',
           group: 'cotation',
           groupSeparator: ' / ',
-          groupPrefix: 'Cotations (Difficulté / Exposition / Marche)',
+          groupPrefix: 'grades_ski',
           icon: 'topos/difficulty_rating',
         },
         {
@@ -1781,7 +1791,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C4a',
                     group: 'denivele',
           groupSeparator: ' / ',
-          groupPrefix: 'Dénivelé (+ / - / difficultés)',
+          groupPrefix: 'elevation_gain_loss_difficulty',
           icon: 'topos/positive_elevation',
         },
         {
@@ -1808,7 +1818,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D2a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude (max / min)',
+          groupPrefix: 'elevation_max_min',
           icon: 'topos/altitude',
         },
         {
@@ -1822,7 +1832,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'D3a',
                     group: 'pente',
           icon: 'topos/slope',
-          groupPrefix: 'Pente max / Longueur',
+          groupPrefix: 'slope_max_length',
         },
         {
           key: 'max_slope_length',
@@ -1849,7 +1859,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'F4a',
           group: 'duration',
           groupSeparator: ' / ',
-          groupPrefix: 'Durées (totale, difficulté, approche, retour)',
+          groupPrefix: 'durations_total_difficulty_approach_return',
           valueFormatter: formatDurationMinutesToHours,
           icon: 'topos/duration',
         },
@@ -1899,7 +1909,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     orderKey: 'C4a',
                     group: 'altitude',
           groupSeparator: ' / ',
-          groupPrefix: 'Altitude décollage',
+          groupPrefix: 'altitude_takeoff',
           icon: 'topos/altitude',
         },
         // {
@@ -1955,15 +1965,43 @@ export function vocabularyUnit(key: string): string | undefined {
   return FIELD_LABELS[canonicalKey(key)]?.unit ?? undefined;
 }
 
+/**
+ * Libellé d'une ligne qui compose plusieurs champs (« Dénivelé + / - »).
+ *
+ * `GROUP_LABELS` d'abord ; un groupe libellé comme l'un de ses champs n'a
+ * pas d'entrée et retombe sur le vocabulaire, forme longue. Une clé inconnue
+ * est rendue telle quelle — visible, plutôt qu'une ligne sans nom.
+ */
+export function groupLabel(group: string): string {
+  return GROUP_LABELS[group] ?? vocabularyLabel(group, 'long') ?? group;
+}
+
 // Les entrées de config n'embarquent plus leur libellé : on le pose ici, une
 // fois, à partir du vocabulaire. La forme longue est le défaut ; la vignette
 // bascule sur la forme courte au moment du rendu (cf. getDisplayItemsForGroups).
+// Les préfixes de groupe et les libellés de repli suivent le même chemin,
+// overrides compris : un contexte peut rattacher un champ à un autre groupe
+// et le renommer.
+const LABEL_KEYS = [
+  'groupPrefix',
+  'fallbackLabel',
+  'fallbackGroupPrefix',
+  'secondFallbackLabel',
+  'secondFallbackGroupPrefix',
+] as const;
+
 for (const config of Object.values(ACTIVITY_CONFIGS)) {
   for (const group of Object.values(config.fields)) {
     for (const field of group) {
       field.label = vocabularyLabel(field.key, 'long') ?? field.key;
       const unit = vocabularyUnit(field.key);
       if (unit) field.unit = unit;
+      for (const prop of LABEL_KEYS) {
+        if (field[prop]) field[prop] = groupLabel(field[prop]);
+      }
+      for (const override of Object.values(field.displayContextOverrides ?? {})) {
+        if (override.groupPrefix) override.groupPrefix = groupLabel(override.groupPrefix);
+      }
     }
   }
 }
@@ -2314,7 +2352,7 @@ export function getGuideCardGroupCItems(
     );
     if (duree) {
       items.push({
-        label: 'Durée',
+        label: groupLabel('duration_total_difficulty'),
         value: duree,
         orderKey: 'C4',
         group: 'C',
@@ -2328,7 +2366,7 @@ export function getGuideCardGroupCItems(
     );
     if (deniv) {
       items.push({
-        label: 'Dénivelé',
+        label: groupLabel('elevation_gain_difficulty'),
         value: deniv,
         orderKey: 'C5',
         group: 'C',
@@ -2350,7 +2388,7 @@ export function getGuideCardGroupCItems(
           ? {
               ...item,
               value: deniv,
-              label: 'Dénivelé des difficultés',
+              label: vocabularyLabel('elevation_difficulty', 'short'),
               icon: resolvedIcon('topos/positive_elevation'),
             }
           : item

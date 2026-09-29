@@ -67,6 +67,14 @@ Rien ne synchronise automatiquement les deux dépôts. C'est
 la copie honnête — et l'endpoint `GET /api/field-labels` qui permet de corriger
 une formulation sans attendre une release.
 
+Les **lignes composées** — « Dénivelé + / - : 900 m / 850 m » — ont leur
+libellé au même endroit, dans `GROUP_LABELS`, sous une clé qui nomme la
+composition. Dans `filter-utils.ts`, `groupPrefix` et les libellés de repli
+sont donc des clés, jamais des phrases ; un groupe qui se nomme comme l'un de
+ses champs prend la clé du champ et retombe sur le vocabulaire. `npm run
+check` refuse une clé qui n'est ni un groupe ni un champ, et tout `label`
+écrit en dur — ils étaient écrasés au chargement sans que rien ne le dise.
+
 ## Les filtres : ce qui empêchait de les partager
 
 `src/filter-utils.ts` existait en deux exemplaires — le front web et
