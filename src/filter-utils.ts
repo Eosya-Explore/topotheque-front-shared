@@ -1933,6 +1933,77 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
     },
   },
 };
+/** Préfixe des catégories d'escalade : couenne, bloc, grande voie. */
+const CLIMBING_CATEGORY_PREFIX = 'climbing-';
+
+/**
+ * Section « climbing » : l'intersection des catégories d'escalade.
+ *
+ * L'API renvoie parfois `climbing` sans sous-type — page de topoguide, options de filtres — là où
+ * la table décline l'escalade par catégorie. Sans entrée `climbing`, ces réponses ne résolvent
+ * aucune configuration et s'affichent vides.
+ *
+ * L'intersection est le seul contenu défendable : un champ propre à la grande voie n'a rien à dire
+ * d'une fiche dont on ignore la catégorie. Chaque champ retenu est recopié de la première catégorie
+ * qui le déclare — libellé, icône, formateur et surcharges de contexte comprises — et reçoit la plus
+ * petite clé d'ordre des catégories, pour qu'il ne descende pas plus bas dans la fiche que là où une
+ * catégorie le place.
+ *
+ * La section est générée et non écrite à la main : une divergence entre les catégories et leur
+ * intersection ne se verrait qu'à l'écran, sur une fiche à laquelle il manque une ligne.
+ */
+function buildClimbingIntersection(configs: { [key: string]: ActivityConfig }): ActivityConfig {
+  const categories = Object.keys(configs)
+    .filter((key) => key.startsWith(CLIMBING_CATEGORY_PREFIX))
+    .map((key) => configs[key]);
+  const fields: { [group: string]: ActivityFieldConfig[] } = {};
+  const [firstCategory, ...otherCategories] = categories;
+  if (!firstCategory) return { name: 'Escalade', fields };
+
+  for (const [group, groupFields] of Object.entries(firstCategory.fields)) {
+    const commonFields = groupFields
+      .filter((field) =>
+        otherCategories.every((category) =>
+          (category.fields[group] ?? []).some((other) => other.key === field.key)
+        )
+      )
+      .map((field) => {
+        const orderKeys = categories
+          .map(
+            (category) =>
+              (category.fields[group] ?? []).find((other) => other.key === field.key)?.orderKey
+          )
+          .filter((orderKey): orderKey is string => orderKey !== undefined)
+          .sort(compareOrderKeys);
+        return orderKeys.length > 0 ? { ...field, orderKey: orderKeys[0] } : { ...field };
+      });
+    if (commonFields.length > 0) fields[group] = commonFields;
+  }
+  return { name: 'Escalade', fields };
+}
+
+ACTIVITY_CONFIGS['climbing'] = buildClimbingIntersection(ACTIVITY_CONFIGS);
+
+/**
+ * `climbing` devant les catégories d'escalade : l'ordre des clés décide de l'ordre des groupes de
+ * filtres chez les consommateurs, et l'intersection se lit comme l'entrée générale dont les
+ * catégories sont le détail.
+ *
+ * On réordonne en place — supprimer puis réinsérer chaque clé dans l'ordre voulu — parce que des
+ * composants gardent une référence sur la table : la remplacer par un objet trié laisserait les
+ * deux versions coexister.
+ */
+for (const key of (() => {
+  const keys = Object.keys(ACTIVITY_CONFIGS).filter((key) => key !== 'climbing');
+  const firstCategoryIndex = keys.findIndex((key) => key.startsWith(CLIMBING_CATEGORY_PREFIX));
+  keys.splice(firstCategoryIndex === -1 ? keys.length : firstCategoryIndex, 0, 'climbing');
+  return keys;
+})()) {
+  const config = ACTIVITY_CONFIGS[key];
+  delete ACTIVITY_CONFIGS[key];
+  ACTIVITY_CONFIGS[key] = config;
+}
+
 /** Résout les clés héritées des fronts (ropes_length → rope_length, …). */
 function canonicalKey(key: string): string {
   return FIELD_ALIASES[key] ?? key;
@@ -2408,8 +2479,11 @@ export function getDisplayItemsForGuidebooks(
 
   // L'API renvoie le nom anglais ('climbing') ; les configs escalade sont
   // déclinées par sous-type ('climbing-multi-pitch', 'climbing-boulder', …).
+  // Le sous-type manque parfois (agrégats de topoguide) : la section `climbing`
+  // prend alors le relais, sinon la page s'affiche sans aucun attribut.
   if (formattedActivityKey === 'climbing' || formattedActivityKey === 'escalade') {
-    formattedActivityKey = 'climbing-' + formattedSubActivityKey;
+    const categoryKey = CLIMBING_CATEGORY_PREFIX + formattedSubActivityKey;
+    formattedActivityKey = ACTIVITY_CONFIGS[categoryKey] ? categoryKey : 'climbing';
   }
   // On ajoute le displayContext "guidebook-page"
   const displayContext = "guidebook-page";
@@ -2450,7 +2524,9 @@ export function getUnit(
     .toLowerCase()
     .replace(/[\s_]+/g, '-');
   if (formattedActivityKey === 'climbing' || formattedActivityKey === 'escalade') {
-    formattedActivityKey = 'climbing-' + formattedSubActivityKey;
+    // Sous-type absent : la section `climbing` (intersection) sert de repli.
+    const categoryKey = CLIMBING_CATEGORY_PREFIX + formattedSubActivityKey;
+    formattedActivityKey = ACTIVITY_CONFIGS[categoryKey] ? categoryKey : 'climbing';
   }
   const config = ACTIVITY_CONFIGS[formattedActivityKey];
   // On cherche le champ dans tous les groupes (C, D et F) : certains champs
