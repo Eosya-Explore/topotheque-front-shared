@@ -11,6 +11,9 @@
 //
 // `short` : vignettes et filtres — contextes étroits.
 // `long`  : pages de présentation, admin, pages bots.
+//
+// `GROUP_LABELS` nomme les compositions de champs affichées sur une ligne
+// (« Dénivelé + / - »).
 
 export interface FieldLabel {
   short: string;
@@ -365,4 +368,29 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
 export const FIELD_ALIASES: { [alias: string]: string } = {
   "elevation": "elevation_max",
   "ropes_length": "rope_length"
+};
+
+// Compositions de champs affichées sur une ligne.
+export const GROUP_LABELS: { [group: string]: string } = {
+  "altitude_takeoff": "Altitude décollage",
+  "crag_height_max_min": "Hauteur site max / min",
+  "crag_height_min_max": "Hauteur site min / max",
+  "duration_total_difficulty": "Durée",
+  "durations_approach_canyon_return": "Durées (approche, canyon, retour)",
+  "durations_approach_via_return": "Durées (approche / via / retour)",
+  "durations_total_approach_difficulty_return": "Durées (totale, approche, difficulté, retour)",
+  "durations_total_difficulty_approach_return": "Durées (totale, difficulté, approche, retour)",
+  "durations_total_difficulty_return": "Durées (totale, difficulté, retour)",
+  "elevation_difficulty_developed_length": "Dénivelé des difficultées",
+  "elevation_gain_difficulty": "Dénivelé",
+  "elevation_gain_loss": "Dénivelé + / -",
+  "elevation_gain_loss_difficulty": "Dénivelé (+ / - / difficultés)",
+  "elevation_max_min": "Altitude (max / min)",
+  "elevation_min_max": "Altitude min / max",
+  "elevation_total_gain_loss_difficulty": "Dénivelé total ( + / - / difficultés )",
+  "elevation_total_gain_loss_difficulty_multi_pitch": "Dénivelé total ( + / - / difficultées)",
+  "grades": "Cotations",
+  "grades_ski": "Cotations (Difficulté / Exposition / Marche)",
+  "rope_length_vertical_number": "Longueur de corde nécessaire et nombre de verticales",
+  "slope_max_length": "Pente max / Longueur"
 };
