@@ -36,6 +36,8 @@ export interface ActivityFieldConfig {
   valueFormatter?: (value: any) => string;
   icon?: string;
   hide?: boolean;
+  /** Pas de ligne quand la valeur est vide, au lieu du « - » des autres champs. */
+  hideWhenEmpty?: boolean;
   /** Champ affiché à la place quand celui-ci est vide. */
   fallbackKey?: string;
   /**
@@ -1413,6 +1415,7 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
         {
           key: 'shuttle',
                     orderKey: 'F5a',
+                    hideWhenEmpty: true,
                     icon: 'topos/distance',
                     valueFormatter: formatShuttle,
         },
@@ -2197,13 +2200,17 @@ export function getDisplayItemsForGroups(
         value = value.map((item: any) => item.orient).join(', ');
       }
 
-      let displayValueStr: string;
-      if (
+      const hasValue =
         value !== null &&
         value !== undefined &&
         value !== '' &&
-        !(Array.isArray(value) && value.length === 0)
-      ) {
+        !(Array.isArray(value) && value.length === 0);
+      if (baseField.hideWhenEmpty && !hasValue) {
+        continue;
+      }
+
+      let displayValueStr: string;
+      if (hasValue) {
         if (baseField.valueFormatter) {
           value = baseField.valueFormatter(value);
         }
