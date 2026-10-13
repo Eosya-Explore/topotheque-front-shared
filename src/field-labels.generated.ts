@@ -328,8 +328,8 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
     "unit": null
   },
   "rope_length": {
-    "long": "Longueur de corde nécessaire",
-    "short": "Longueur de corde",
+    "long": "Longueur de corde minimale (hors rappel et sécurité)",
+    "short": "Corde minimale",
     "unit": "m"
   },
   "route_number": {
@@ -391,6 +391,6 @@ export const GROUP_LABELS: { [group: string]: string } = {
   "elevation_total_gain_loss_difficulty_multi_pitch": "Dénivelé total ( + / - / difficultées)",
   "grades": "Cotations",
   "grades_ski": "Cotations (Difficulté / Exposition / Marche)",
-  "rope_length_vertical_number": "Longueur de corde nécessaire et nombre de verticales",
+  "rope_length_vertical_number": "Longueur de corde minimale et nombre de verticales",
   "slope_max_length": "Pente max / Longueur"
 };
