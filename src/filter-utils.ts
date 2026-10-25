@@ -1843,6 +1843,13 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     group: 'pente',
           icon: 'topos/difficulty_rating',
         },
+        // Arbitrage Seb 25/10/2026 : la distance devient un critère de filtre
+        // et une tuile de la page topo → D4 (était F5).
+        {
+          key: 'distance',
+          orderKey: 'D4',
+          icon: 'topos/distance',
+        },
       ],
       F: [
         {
@@ -1891,11 +1898,6 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
           key: 'duration_days',
           orderKey: 'F4e',
           icon: 'topos/duration',
-        },
-        {
-          key: 'distance',
-                    orderKey: 'F5',
-                    icon: 'topos/distance',
         },
         { key: 'period', orderKey: 'F6', icon: 'topos/period' },
         { key: 'ign_map', orderKey: 'F7', icon: 'topos/ign_map' },
@@ -1985,6 +1987,13 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
                     group: 'pente',
           icon: 'topos/difficulty_rating',
         },
+        // Arbitrage Seb 25/10/2026 : la distance devient un critère de filtre
+        // et une tuile de la page topo → D4 (était F5).
+        {
+          key: 'distance',
+          orderKey: 'D4',
+          icon: 'topos/distance',
+        },
       ],
       F: [
         {
@@ -2028,11 +2037,6 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
           group: 'duration',
           valueFormatter: formatDurationMinutesToHours,
           icon: 'topos/duration',
-        },
-        {
-          key: 'distance',
-                    orderKey: 'F5',
-                    icon: 'topos/distance',
         },
         { key: 'period', orderKey: 'F6', icon: 'topos/period' },
         { key: 'ign_map', orderKey: 'F7', icon: 'topos/ign_map' },
