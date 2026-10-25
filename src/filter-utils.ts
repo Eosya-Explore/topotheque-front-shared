@@ -15,6 +15,7 @@ import {
   FIELD_ALIASES,
   FIELD_LABELS,
   GROUP_LABELS,
+  GROUP_SHORT_LABELS,
 } from './field-labels.generated.js';
 
 export interface ActivityFieldConfig {
@@ -31,6 +32,14 @@ export interface ActivityFieldConfig {
    * `label`. Absent, la ligne prend le libellé de son premier champ.
    */
   groupPrefix?: string;
+  /**
+   * Forme courte du libellé de groupe, posée au chargement quand le
+   * vocabulaire en donne une ; la vignette la prend à la place de
+   * `groupPrefix`. `null` quand un override redéfinit le groupe sans forme
+   * courte (sinon l'héritage par `{ ...field, ...override }` garderait
+   * celle du champ de base).
+   */
+  groupPrefixShort?: string | null;
   itemPrefix?: string;
   itemSuffix?: string;
   valueFormatter?: (value: any) => string;
@@ -61,6 +70,7 @@ export interface ActivityFieldConfig {
       group?: string | null;
       groupSeparator?: string | null;
       groupPrefix?: string | null;
+      groupPrefixShort?: string | null;
       itemPrefix?: string | null;
       itemSuffix?: string | null;
       orderKey?: string | null;
@@ -2197,8 +2207,14 @@ export function vocabularyUnit(key: string): string | undefined {
  * pas d'entrée et retombe sur le vocabulaire, forme longue. Une clé inconnue
  * est rendue telle quelle — visible, plutôt qu'une ligne sans nom.
  */
-export function groupLabel(group: string): string {
-  return GROUP_LABELS[group] ?? vocabularyLabel(group, 'long') ?? group;
+export function groupLabel(
+  group: string,
+  form: 'short' | 'long' = 'long'
+): string {
+  if (form === 'short' && GROUP_SHORT_LABELS[group]) {
+    return GROUP_SHORT_LABELS[group];
+  }
+  return GROUP_LABELS[group] ?? vocabularyLabel(group, form) ?? group;
 }
 
 // Les entrées de config n'embarquent plus leur libellé : on le pose ici, une
@@ -2221,11 +2237,17 @@ for (const config of Object.values(ACTIVITY_CONFIGS)) {
       field.label = vocabularyLabel(field.key, 'long') ?? field.key;
       const unit = vocabularyUnit(field.key);
       if (unit) field.unit = unit;
+      if (field.groupPrefix) {
+        field.groupPrefixShort = GROUP_SHORT_LABELS[field.groupPrefix] ?? null;
+      }
       for (const prop of LABEL_KEYS) {
         if (field[prop]) field[prop] = groupLabel(field[prop]);
       }
       for (const override of Object.values(field.displayContextOverrides ?? {})) {
-        if (override.groupPrefix) override.groupPrefix = groupLabel(override.groupPrefix);
+        if (override.groupPrefix) {
+          override.groupPrefixShort = GROUP_SHORT_LABELS[override.groupPrefix] ?? null;
+          override.groupPrefix = groupLabel(override.groupPrefix);
+        }
       }
     }
   }
@@ -2418,7 +2440,11 @@ export function getDisplayItemsForGroups(
           } else if (usedFallback && baseField.fallbackGroupPrefix) {
             effectiveGroupPrefix = baseField.fallbackGroupPrefix;
           } else {
-            effectiveGroupPrefix = baseField.groupPrefix || labelOf(baseField);
+            // Vignette : forme courte du groupe quand le vocabulaire en a une.
+            effectiveGroupPrefix =
+              (form === 'short' && baseField.groupPrefixShort) ||
+              baseField.groupPrefix ||
+              labelOf(baseField);
           }
           
           groupsMap[currentGroupName] = {
@@ -2446,7 +2472,8 @@ export function getDisplayItemsForGroups(
         } else if (usedFallback && baseField.fallbackGroupPrefix) {
           effectiveGroupPrefixUpdate = baseField.fallbackGroupPrefix;
         } else {
-          effectiveGroupPrefixUpdate = baseField.groupPrefix;
+          effectiveGroupPrefixUpdate =
+            (form === 'short' && baseField.groupPrefixShort) || baseField.groupPrefix;
         }
         
         if (effectiveGroupPrefixUpdate && !groupsMap[currentGroupName].isPrefixSet) {

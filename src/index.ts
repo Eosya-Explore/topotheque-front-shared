@@ -41,6 +41,7 @@ export {
   FIELD_ALIASES,
   FIELD_LABELS,
   GROUP_LABELS,
+  GROUP_SHORT_LABELS,
 } from './field-labels.generated.js';
 
 export type { PictoEntry, PictoFamily, PictoFiles } from './pictos.generated.js';

@@ -13,7 +13,8 @@
 // `long`  : pages de présentation, admin, pages bots.
 //
 // `GROUP_LABELS` nomme les compositions de champs affichées sur une ligne
-// (« Dénivelé + / - »).
+// (« Dénivelé + / - ») ; `GROUP_SHORT_LABELS` en donne la forme courte pour
+// les vignettes, seulement quand la forme longue n'y tient pas.
 
 export interface FieldLabel {
   short: string;
@@ -398,4 +399,12 @@ export const GROUP_LABELS: { [group: string]: string } = {
   "grades_ski": "Cotations (Difficulté / Exposition / Marche)",
   "rope_length_vertical_number": "Longueur de corde nécessaire et nombre de verticales",
   "slope_max_length": "Pente max / Longueur"
+};
+
+// Forme courte des groupes pour les vignettes (repli : GROUP_LABELS).
+export const GROUP_SHORT_LABELS: { [group: string]: string } = {
+  "durations_approach_via_return": "Durées",
+  "durations_total_approach_difficulty_return": "Durées",
+  "elevation_gain_loss_difficulty": "Dénivelé",
+  "grades_ski": "Cotations"
 };
