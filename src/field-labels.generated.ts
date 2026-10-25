@@ -57,6 +57,11 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
     "short": "Durée approche",
     "unit": "min"
   },
+  "duration_days": {
+    "long": "Nombre de jours",
+    "short": "Nombre de jours",
+    "unit": null
+  },
   "duration_difficulty": {
     "long": "Durée des difficultés",
     "short": "Durée diff.",

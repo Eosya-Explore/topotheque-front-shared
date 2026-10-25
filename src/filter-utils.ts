@@ -1888,12 +1888,159 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
           icon: 'topos/duration',
         },
         {
+          key: 'duration_days',
+          orderKey: 'F4e',
+          icon: 'topos/duration',
+        },
+        {
           key: 'distance',
                     orderKey: 'F5',
                     icon: 'topos/distance',
         },
         { key: 'period', orderKey: 'F6', icon: 'topos/period' },
         { key: 'ign_map', orderKey: 'F7', icon: 'topos/ign_map' },
+      ],
+    },
+  },
+
+  // Raid à ski (plusieurs jours) : le nombre de jours prend la place de
+  // l'orientation en C5 ; l'orientation, peu parlante sur un itinéraire de
+  // plusieurs jours, passe en F8. Même clé que la sous-activité servie par
+  // l'API (`activity_type` = ski_traverse), sur le modèle de l'escalade.
+  'backcountry_skiing-ski-traverse': {
+    name: 'Backcountry Skiing (ski traverse)',
+    fields: {
+      C: [
+        {
+          key: 'grade_ski_toponeige',
+                    orderKey: 'C3a',
+          group: 'cotation',
+          groupSeparator: ' / ',
+          groupPrefix: 'grades_ski',
+          icon: 'topos/difficulty_rating',
+        },
+        {
+          key: 'grade_expo',
+                    orderKey: 'C3b',
+          group: 'cotation',
+          icon: 'topos/exposition',
+        },
+        {
+          key: 'grade_ski_up',
+                    orderKey: 'C3c',
+          group: 'cotation',
+          icon: 'topos/ski',
+        },
+        {
+          key: 'elevation_gain',
+                    orderKey: 'C4a',
+                    group: 'denivele',
+          groupSeparator: ' / ',
+          groupPrefix: 'elevation_gain_loss_difficulty',
+          icon: 'topos/positive_elevation',
+        },
+        {
+          key: 'elevation_loss',
+                    orderKey: 'C4b',
+                    group: 'denivele',
+          icon: 'topos/positive_elevation',
+        },
+        {
+          key: 'elevation_difficulty',
+                    orderKey: 'C4c',
+                    group: 'denivele',
+          icon: 'topos/positive_elevation',
+        },
+        {
+          key: 'duration_days',
+          orderKey: 'C5',
+          icon: 'topos/duration',
+        },
+      ],
+      D: [
+        {
+          key: 'elevation_max',
+                    orderKey: 'D2a',
+                    group: 'altitude',
+          groupSeparator: ' / ',
+          groupPrefix: 'elevation_max_min',
+          icon: 'topos/altitude',
+        },
+        {
+          key: 'elevation_min',
+                    orderKey: 'D2b',
+                    group: 'altitude',
+          icon: 'topos/altitude',
+        },
+        {
+          key: 'max_slope',
+                    orderKey: 'D3a',
+                    group: 'pente',
+          icon: 'topos/slope',
+          groupPrefix: 'slope_max_length',
+        },
+        {
+          key: 'max_slope_length',
+                    orderKey: 'D3b',
+                    group: 'pente',
+          icon: 'topos/difficulty_rating',
+        },
+      ],
+      F: [
+        {
+          key: 'first_ascensionist',
+                    orderKey: 'F1',
+          icon: 'topos/opener',
+        },
+        {
+          key: 'first_ascent_date',
+                    orderKey: 'F2',
+          icon: 'topos/period',
+          valueFormatter: formatDate,
+        },
+        { key: 'grade_book', orderKey: 'F4', icon: 'topos/difficulty_rating' },
+        {
+          key: 'duration_total',
+                    orderKey: 'F4a',
+          group: 'duration',
+          groupSeparator: ' / ',
+          groupPrefix: 'durations_total_difficulty_approach_return',
+          valueFormatter: formatDurationMinutesToHours,
+          icon: 'topos/duration',
+        },
+        {
+          key: 'duration_difficulty',
+                    orderKey: 'F4b',
+          group: 'duration',
+          valueFormatter: formatDurationMinutesToHours,
+          icon: 'topos/duration',
+        },
+        {
+          key: 'duration_approach',
+                    orderKey: 'F4c',
+          group: 'duration',
+          valueFormatter: formatDurationMinutesToHours,
+          icon: 'topos/duration',
+        },
+        {
+          key: 'duration_return',
+                    orderKey: 'F4d',
+          group: 'duration',
+          valueFormatter: formatDurationMinutesToHours,
+          icon: 'topos/duration',
+        },
+        {
+          key: 'distance',
+                    orderKey: 'F5',
+                    icon: 'topos/distance',
+        },
+        { key: 'period', orderKey: 'F6', icon: 'topos/period' },
+        { key: 'ign_map', orderKey: 'F7', icon: 'topos/ign_map' },
+        {
+          key: 'main_orientation',
+          orderKey: 'F8',
+          icon: 'topos/orientation',
+        },
       ],
     },
   },
@@ -2522,13 +2669,17 @@ export function getDisplayItemsForGuidebooks(
     .toLowerCase()
     .replace(/[\s_]+/g, '-');
 
-  // L'API renvoie le nom anglais ('climbing') ; les configs escalade sont
-  // déclinées par sous-type ('climbing-multi-pitch', 'climbing-boulder', …).
-  // Le sous-type manque parfois (agrégats de topoguide) : la section `climbing`
-  // prend alors le relais, sinon la page s'affiche sans aucun attribut.
-  if (formattedActivityKey === 'climbing' || formattedActivityKey === 'escalade') {
-    const categoryKey = CLIMBING_CATEGORY_PREFIX + formattedSubActivityKey;
-    formattedActivityKey = ACTIVITY_CONFIGS[categoryKey] ? categoryKey : 'climbing';
+  // L'API renvoie le nom anglais ('climbing') ; certaines configs sont
+  // déclinées par sous-type ('climbing-multi-pitch', 'climbing-boulder',
+  // 'backcountry_skiing-ski-traverse', …). Le sous-type manque parfois
+  // (agrégats de topoguide) ou n'a pas de déclinaison : la section de
+  // l'activité prend alors le relais, sinon la page s'affiche sans attribut.
+  if (formattedActivityKey === 'escalade') {
+    formattedActivityKey = 'climbing';
+  }
+  const categoryKey = formattedActivityKey + '-' + formattedSubActivityKey;
+  if (ACTIVITY_CONFIGS[categoryKey]) {
+    formattedActivityKey = categoryKey;
   }
   // On ajoute le displayContext "guidebook-page"
   const displayContext = "guidebook-page";
