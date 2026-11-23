@@ -20,8 +20,12 @@ if (groupsAt === -1) {
   console.error('✗ Vocabulaire illisible : `GROUP_LABELS` absent de field-labels.generated.ts.');
   process.exit(1);
 }
-const FIELDS = new Set([...vocabulary.matchAll(/^\s{2}"([^"]+)": \{$/gm)].map((m) => m[1]));
-const GROUPS = new Set([...vocabulary.slice(groupsAt).matchAll(/^\s{2}"([^"]+)": "/gm)].map((m) => m[1]));
+// Les exceptions par sous-activité ferment le fichier : leurs clés de premier
+// niveau sont des activités, pas des champs ni des groupes.
+const exceptionsAt = vocabulary.indexOf('export const SUB_ACTIVITY_LABELS');
+const end = exceptionsAt === -1 ? vocabulary.length : exceptionsAt;
+const FIELDS = new Set([...vocabulary.slice(0, groupsAt).matchAll(/^\s{2}"([^"]+)": \{$/gm)].map((m) => m[1]));
+const GROUPS = new Set([...vocabulary.slice(groupsAt, end).matchAll(/^\s{2}"([^"]+)": "/gm)].map((m) => m[1]));
 if (FIELDS.size === 0 || GROUPS.size === 0) {
   console.error('✗ Vocabulaire illisible : aucun champ ou aucun groupe extrait.');
   process.exit(1);
