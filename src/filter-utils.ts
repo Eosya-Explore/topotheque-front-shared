@@ -16,7 +16,6 @@ import {
   FIELD_LABELS,
   GROUP_LABELS,
   GROUP_SHORT_LABELS,
-  SUB_ACTIVITY_LABELS,
 } from './field-labels.generated.js';
 
 export interface ActivityFieldConfig {
@@ -2063,23 +2062,12 @@ function canonicalKey(key: string): string {
  * Libellé d'un champ. `short` pour les vignettes et les filtres, `long` pour
  * les pages de présentation — c'est la seule distinction que porte le
  * vocabulaire, il n'y a plus de variation par activité.
- *
- * Seules exceptions, arbitrées une à une dans `SUB_ACTIVITY_LABELS` : le
- * libellé d'un champ pour les guides d'une sous-activité. Passer l'activité
- * et l'`activity_type` du guide affiché pour qu'elles s'appliquent.
  */
 export function vocabularyLabel(
   key: string,
-  form: 'short' | 'long' = 'long',
-  activity?: string,
-  activityType?: string | null
+  form: 'short' | 'long' = 'long'
 ): string | undefined {
-  const field = canonicalKey(key);
-  const exception =
-    activity && activityType
-      ? SUB_ACTIVITY_LABELS[activity]?.[activityType]?.[field]
-      : undefined;
-  return (exception ?? FIELD_LABELS[field])?.[form];
+  return FIELD_LABELS[canonicalKey(key)]?.[form];
 }
 
 /** Unité d'affichage, séparée du libellé. */
@@ -2187,14 +2175,8 @@ export function getDisplayItemsForGroups(
   // vocabulaire. Les pages de présentation gardent la forme longue.
   const form: 'short' | 'long' =
     displayContext === 'guide-card' ? 'short' : 'long';
-  // Sous-activité du guide affiché : le vocabulaire peut y renommer un champ
-  // (cascade de glace : « Altitude de la cascade »).
-  const activityType =
-    typeof data['activity_type'] === 'string' ? data['activity_type'] : null;
   const labelOf = (field: ActivityFieldConfig): string =>
-    vocabularyLabel(field.key, form, formattedActivityKey, activityType) ??
-    field.label ??
-    field.key;
+    vocabularyLabel(field.key, form) ?? field.label ?? field.key;
 
   const groupArray = Array.isArray(groups) ? groups : [groups];
   const availableItems: any[] = [];

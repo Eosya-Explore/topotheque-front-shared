@@ -15,9 +15,6 @@
 // `GROUP_LABELS` nomme les compositions de champs affichées sur une ligne
 // (« Dénivelé + / - ») ; `GROUP_SHORT_LABELS` en donne la forme courte pour
 // les vignettes, seulement quand la forme longue n'y tient pas.
-//
-// `SUB_ACTIVITY_LABELS` porte les exceptions arbitrées : le libellé d'un
-// champ pour les guides d'une sous-activité (`activity_type`).
 
 export interface FieldLabel {
   short: string;
@@ -82,7 +79,7 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
     "unit": "min"
   },
   "elevation_crag": {
-    "long": "Altitude du site d'escalade",
+    "long": "Altitude du site",
     "short": "Altitude du site",
     "unit": "m"
   },
@@ -410,21 +407,4 @@ export const GROUP_SHORT_LABELS: { [group: string]: string } = {
   "durations_total_approach_difficulty_return": "Durées",
   "elevation_gain_loss_difficulty": "Dénivelé",
   "grades_ski": "Cotations"
-};
-
-// Exceptions par sous-activité : activité → `activity_type` → champ.
-export const SUB_ACTIVITY_LABELS: {
-  [activity: string]: {
-    [activityType: string]: { [field: string]: FieldLabel };
-  };
-} = {
-  "mountaineering": {
-    "ice_climbing": {
-      "elevation_crag": {
-        "long": "Altitude de la cascade",
-        "short": "Altitude de la cascade",
-        "unit": "m"
-      }
-    }
-  }
 };
