@@ -79,7 +79,7 @@ export const FIELD_LABELS: { [field: string]: FieldLabel } = {
     "unit": "min"
   },
   "elevation_crag": {
-    "long": "Altitude du site d'escalade",
+    "long": "Altitude du site",
     "short": "Altitude du site",
     "unit": "m"
   },

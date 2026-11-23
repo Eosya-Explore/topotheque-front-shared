@@ -1629,14 +1629,29 @@ export const ACTIVITY_CONFIGS: { [key: string]: ActivityConfig } = {
             },
           },
         },
+        // Arbitrages Seb des 22 et 23/11/2026 : une cascade de glace n'a que
+        // l'altitude du bas de la voie, saisie dans « Altitude du site » ;
+        // l'altitude maximale reste le haut d'une voie de montagne. La ligne
+        // est en D6 (l'ouvreur et la date d'ouverture passent en D7 et D8) et
+        // disparaît quand elle est vide. Le résumé du topoguide ne sait pas
+        // retirer une ligne vide : elle n'y figure pas.
+        {
+          key: 'elevation_crag',
+          orderKey: 'D6',
+          hideWhenEmpty: true,
+          icon: 'topos/altitude',
+          displayContextOverrides: {
+            'guidebook-page': { hide: true },
+          },
+        },
         {
           key: 'first_ascensionist',
-                    orderKey: 'D6',
+                    orderKey: 'D7',
           icon: 'topos/opener',
         },
         {
           key: 'first_ascent_date',
-                    orderKey: 'D7',
+                    orderKey: 'D8',
           icon: 'topos/period',
           valueFormatter: formatDate,
         },
